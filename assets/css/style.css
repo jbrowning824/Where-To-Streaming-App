@@ -1,0 +1,15 @@
+.boxes{
+    display: flex;
+    align-content: space-between;
+    
+}
+
+.box{
+    background-color: orange;
+    margin: 2px;
+    
+}
+
+#aside {
+    height: 100%;
+}
