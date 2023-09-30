@@ -2,7 +2,9 @@
 
     height: 85vh;
 }
-
+.main {
+    overflow: scroll;
+}
 .logos{
     list-style-type: none;
 }

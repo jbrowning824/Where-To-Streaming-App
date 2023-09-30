@@ -1,29 +1,28 @@
-var cards = 14;
 var streamingLogos = [{
     platform: "amazon",
     img: "./assets/images/amazonprime.svg",
     height: "15px"
 },
-// {
-//     platform: "apple",
-//     img: "./assets/images/appletv.svg",
-//     height: "15px"
-// },
-// {
-//     platform: "curiosity",
-//     img: "./assets/images/curiositystream.svg",
-//     height: "15px"
-// },
-// {
-//     platform: "disney",
-//     img: "./assets/images/disney+.svg",
-//     height: "20px"
-// },
-// {
-//     platform: "hbo",
-//     img: "./assets/images/hbo.svg",
-//     height: "10px"
-// },
+{
+    platform: "apple",
+    img: "./assets/images/appletv.svg",
+    height: "15px"
+},
+{
+    platform: "curiosity",
+    img: "./assets/images/curiositystream.svg",
+    height: "15px"
+},
+{
+    platform: "disney",
+    img: "./assets/images/disney+.svg",
+    height: "20px"
+},
+{
+    platform: "hbo",
+    img: "./assets/images/hbo.svg",
+    height: "10px"
+},
 {
     platform: "hulu",
     img: "./assets/images/hulu.svg",
@@ -60,6 +59,23 @@ var genres = [{
 
 var cardContainer = $('.card-container');
 
+
+$(document).ready(function(){
+    $('.modal').modal({
+        onCloseEnd: () => {
+            $(this).find('.modal-content').empty();
+        }
+    });
+
+    $('.open-modal').click(function(){
+        var instance = M.Modal.getInstance($('#movie-full-info'));
+
+        instance.open();
+        populateModal(this);
+    });
+    
+    $('.destroy-modal')
+  });
 
 function mockAPI(){
     var movies = [{
@@ -193,14 +209,83 @@ function mockAPI(){
             source: "Metacritic",
             value: "27/100"
         }]
+    },
+    {
+        title: "The Other Guys",
+        imdbId: "tt1386588",
+        year: 2010,
+        released: "06 Aug 2010",
+        director: "Chris Columbus",
+        genres: [{
+            id: 28,
+            name: "Action"
+        },
+        {   
+            id: 35,
+            name: "Comedy"
+        },
+        {   
+            id: 80,
+            name: "Crime"
+        }],
+        poster: "https://m.media-amazon.com/images/M/MV5BMDlhZDQ5NDUtNDcwMi00MTQ5LTk1Y2UtYjNmMjgzNzNhNzU3XkEyXkFqcGdeQXVyODE5NzE3OTE@._V1_SX300.jpg",
+        rated: "PG-13",
+        runtime: "107 min",
+        plot: "Two mismatched New York City detectives seize an opportunity to step up like the city's top cops, whom they idolize, only things don't quite go as planned.",
+        ratings: [{
+            source: "Internet Movie Database",
+            value: "6.6/10"
+        },
+        {
+            source: "Rotten Tomatoes",
+            value: "79%"
+        },
+        {
+            source: "Metacritic",
+            value: "64/100"
+        }]
+    },
+    {
+        title: "Ready Player One",
+        imdbId: "tt1677720",
+        year: 2018,
+        released: "29 Mar 2018",
+        director: "Steven Spielberg",
+        genres: [{
+            id: 28,
+            name: "Action"
+        },
+        {   
+            id: 12,
+            name: "Adventure"
+        },
+        {   
+            id: 878,
+            name: "Science Fiction"
+        }],
+        poster: "https://m.media-amazon.com/images/M/MV5BY2JiYTNmZTctYTQ1OC00YjU4LWEwMjYtZjkwY2Y5MDI0OTU3XkEyXkFqcGdeQXVyNTI4MzE4MDU@._V1_SX300.jpg",
+        rated: "PG-13",
+        runtime: "140 min",
+        plot: "When the creator of a virtual reality called the OASIS dies, he makes a posthumous challenge to all OASIS users to find his Easter Egg, which will give the finder his fortune and control of his world.",
+        ratings: [{
+            source: "Internet Movie Database",
+            value: "7.4/10"
+        },
+        {
+            source: "Rotten Tomatoes",
+            value: "72%"
+        },
+        {
+            source: "Metacritic",
+            value: "64/100"
+        }]
     }]
 
+    localStorage.setItem("movies", JSON.stringify(movies));
     movies.forEach((movie) => {
         addMovieCard(movie);
     });
 }
-
-
 
 function addMovieCard(movie) {
     
@@ -218,7 +303,7 @@ function addMovieCard(movie) {
         var infoRating = $("<li></li>").text(`Rating: ${movie.rated}`);
         var infoRuntime = $("<li></li>").text(`Runtime: ${movie.runtime}`);
         var cardFooter = $("<div></div").addClass("card-action");
-        var openModel = $("<a></a>", {href: "#"}).text("More Info");
+        var openModel = $("<a></a>", {href: "#movie-full-info",id: movie.imdbId}).addClass("open-modal").text("More Info");
 
         cardContainer.append(col);
         col.append(newCard);
@@ -228,26 +313,43 @@ function addMovieCard(movie) {
         cardContent.append(logoListContainer, movieInfo);
         movieInfo.append(infoTitle, infoRating, infoRuntime);
         cardFooter.append(openModel);
+
+        // streamingLogos.forEach((logo) => {
+        //     console.log(logo.img);
+        //     var logoList = $("<li></li>");
+        //     var logoImg = $('<img />',
+        //                         {
+        //                            src: logo.img,
+        //                            height: logo.height 
+        //                         });
+        //     logoListContainer.append(logoList);
+        //     logoList.append(logoImg);
+        // });
 }
+
+
+
+
 
 function addGeneres(){
 
 }
+
+function populateModal(event){   
+    console.log(event);
+    
+    var movies = JSON.parse(localStorage.getItem('movies'));
+    var movie = movies.find(m => m.imdbId === event.id);
+    var text = $('<p></p>').text(JSON.stringify(movie));
+    $('.modal-content').append(text);
+}
+
+
 
 function init() {
     mockAPI();
 }
 
 init();
-    // streamingLogos.forEach((logo) => {
-    //     console.log(logo.img);
-    //     var logoList = $("<li></li>");
-    //     var logoImg = $('<img />',
-    //                         {
-    //                            src: logo.img,
-    //                            height: logo.height 
-    //                         });
-    //     logoListContainer.append(logoList);
-    //     logoList.append(logoImg);
-    // });
+    
 
