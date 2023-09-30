@@ -11,7 +11,7 @@
     margin: 1.5px;
 }
 .card-image {
-    background-image: url("https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTYtMDIzNi00NGVlLWIzMDYtZTk3MTQ3NGQxZGEwXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_SX300.jpg");
+    /* background-image: url("https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTYtMDIzNi00NGVlLWIzMDYtZTk3MTQ3NGQxZGEwXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_SX300.jpg"); */
     background-size: cover;
     height: 250px;
 }
@@ -26,23 +26,40 @@
 }
 
 .card .card-content {
-    padding-bottom: 0;
-    padding-top: 0;
+    padding: 0 0 0 10px;
+    font-size: 12px;
+}
+.movie-title{
+    width: 250px;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-
-
+@media only screen and (max-width: 922px) {
+.card-image {
+    height: 150px;
+}
+.card-content{
+    font-size: 8px;
+}
+.movie-title{
+    width: 200px;
+}
+}
 @media only screen and (max-width: 600px) {
-    .card-image {
-        height: 150px;
-    }
-    .aside{
-        display: none;
-    }
-  }
+.card-image {
+    height: 150px;
+}
+.aside{
+    display: none;
+}
+.card-content{
+    font-size: 10px;
+}
+.movie-title{
+    width: 180px;
+}
+}
 
-  @media only screen and (max-width: 922px) {
-    .card-image {
-        height: 150px;
-    }
-  }
