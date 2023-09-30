@@ -1,15 +1,48 @@
-.boxes{
-    display: flex;
-    align-content: space-between;
-    
+.aside {
+
+    height: 85vh;
 }
 
-.box{
-    background-color: orange;
-    margin: 2px;
-    
+.logos{
+    list-style-type: none;
+}
+.logos li{
+    display: inline;
+    margin: 1.5px;
+}
+.card-image {
+    background-image: url("https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTYtMDIzNi00NGVlLWIzMDYtZTk3MTQ3NGQxZGEwXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_SX300.jpg");
+    background-size: cover;
+    height: 250px;
+}
+.card {
+    border-radius: 10px 10px 0 0;
+}
+.card .card-image {
+    border-radius: 10px 10px 0 0;
+}
+.movie-quick-info{
+    list-style-type: none;
 }
 
-#aside {
-    height: 100%;
+.card .card-content {
+    padding-bottom: 0;
+    padding-top: 0;
 }
+
+
+
+@media only screen and (max-width: 600px) {
+    .card-image {
+        height: 150px;
+    }
+    .aside{
+        display: none;
+    }
+  }
+
+  @media only screen and (max-width: 922px) {
+    .card-image {
+        height: 150px;
+    }
+  }
