@@ -19,7 +19,7 @@
               <a class="brand-logo right">StreamLine Cinemas</a>
                 <form>
                   <div class="input-field left">
-                    <input id="search" type="search" required>
+                    <input id="search" type="search" required placeholder="Search by movie title...">
                     <label class="label-icon" for="search"><i class="material-icons">search</i></label>
                     <i class="material-icons clear-input">close</i>
                   </div>
@@ -34,35 +34,13 @@
             <div class="col s12 m2 l2 aside #424242 grey darken-3">
               <h5>Genres:</h5>
               <ul>
-                <li style="display: flex; justify-content: flex-start;"><div style="display: flex; align-items: center; height: 25px; font-size: 20px;">
-                  <img src="https://cdn.imgbin.com/24/11/3/hiking-icon-backpack-icon-adventure-icon-5QV3DDYU.jpg" height="25px" width="25px" alt="" srcset="" style="border-radius: 5px; display: inline; margin-right: 10px">Adventure</div>
-                </li>
-                <li style="display: flex; justify-content: flex-start;"><div style="display: flex; align-items: center; height: 25px; font-size: 20px;">
-                  <img src="data:image/png;base64,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" height="25px" width="25px" alt="" srcset="" style="border-radius: 5px; display: inline; margin-right: 10px">Action</div>
-                </li>
-                <li style="display: flex; justify-content: flex-start;"><div style="display: flex; align-items: center; height: 25px; font-size: 20px;">
-                  <img src="https://cdn-icons-png.flaticon.com/512/4751/4751298.png" height="25px" width="25px" alt="" srcset="" style="border-radius: 5px; display: inline; margin-right: 10px">Crime</div>
-                </li>
-                <li style="display: flex; justify-content: flex-start;"><div style="display: flex; align-items: center; height: 25px; font-size: 20px;">
-                  <img src="https://cdn-icons-png.flaticon.com/512/2445/2445272.png" height="25px" width="25px" alt="" srcset="" style="border-radius: 5px; display: inline; margin-right: 10px">Drama</div>
-                </li>
-                <li style="display: flex; justify-content: flex-start;"><div style="display: flex; align-items: center; height: 25px; font-size: 20px;">
-                  <img src="https://cdn-icons-png.flaticon.com/512/6347/6347699.png" height="25px" width="25px" alt="" srcset="" style="border-radius: 5px; display: inline; margin-right: 10px">Documentary</div>
-                </li>
-                <li style="display: flex; justify-content: flex-start;"><div style="display: flex; align-items: center; height: 25px; font-size: 20px;">
-                  <img src="https://cdn-icons-png.flaticon.com/512/2589/2589440.png" height="25px" width="25px" alt="" srcset="" style="border-radius: 5px; display: inline; margin-right: 10px">Horror</div>
-                </li>
-                <li style="display: flex; justify-content: flex-start;"><div style="display: flex; align-items: center; height: 25px; font-size: 20px;">
-                  <img src="https://cdn-icons-png.flaticon.com/512/1090/1090877.png" height="25px" width="25px" alt="" srcset="" style="border-radius: 5px; display: inline; margin-right: 10px">Romance</div>
-                </li>
-                
-                <li>action</li>
-                <li>action</li>
-                <li>action</li>
-                <li>action</li>
-                <li>action</li>
-                <li>action</li>
-                <li>action</li>
+                <li>Adventure</li>
+                <li>Action</li>
+                <li>Crime</li>
+                <li>Drama</li>
+                <li>Documentary</li>
+                <li>Horror</li>
+                <li>Romance</li>
               </ul>
             </div>
 
