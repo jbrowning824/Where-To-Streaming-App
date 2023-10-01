@@ -1,17 +1,41 @@
+
 nav {
     position: relative;
     overflow: hidden;
     top: 0; left:0; right:0; bottom:0
 }
+.nav-wrapper .input-field
+input[type=search]{
+    padding-left: 2.5rem;
+    padding-right: 1rem;
+}
 .input-field{
     width: 50%;
-   
     padding-left: 20px;
 }
 .input-field input{
     border-radius: 20px;
+    color: white;  
+}
+.input-field 
+input[type=search]:not(.browser-default){
+    border-radius: 30px;
+    margin-top: 12px;
+    height: 40px;
+    background-color: #757575;
+}
+.input-field
+input[type=search]:focus:not(.browser-default){
+    background-color: #757575;
+    color: white;
+    border-radius: 30px;
+    margin-top: 12px;
+    height: 40px;
 }
 
+.input-field>label{
+    margin-left: 10px;
+}
 
 .aside {
     position: relative;
@@ -27,6 +51,9 @@ nav {
     overflow: auto;
     padding-bottom: 50px;
 }
+.main-bottom-pad{
+    height: 50px;
+}
 .logos{
     list-style-type: none;
 }
@@ -40,18 +67,27 @@ nav {
 }
 .card {
     border-radius: 10px 10px 0 0;
+    
+}
+.card:hover{
+    transform: scale(1.01);
 }
 .card .card-image {
     border-radius: 10px 10px 0 0;
+}
+.card .card-content {
+    color: white;
+    padding: 0 0 0 10px;
+    font-size: 12px;
+}
+.btn-floating.halfway-fab{
+    right: 20px;
 }
 .movie-quick-info{
     list-style-type: none;
 }
 
-.card .card-content {
-    padding: 0 0 0 10px;
-    font-size: 12px;
-}
+
 .movie-title{
     width: 250px;
     display: block;
@@ -89,10 +125,29 @@ nav {
 .movie-title{
     width: 200px;
 }
-}
-@media only screen and (max-width: 600px) {
-.card-image {
+.main-bottom-pad{
     height: 150px;
+}
+}
+
+
+@media only screen and (max-width: 600px) {
+nav .brand-logo {
+    font-size: 1rem;
+}
+.input-field{
+    width: 65%;
+}
+    .card-image {
+    height: 150px;
+}
+.input-field
+input[type=search]:focus:not(.browser-default){
+    margin-top: 8px;
+}
+.input-field
+input[type=search]:not(.browser-default){
+    margin-top: 8px;
 }
 .aside{
     display: none;
@@ -102,6 +157,15 @@ nav {
 }
 .movie-title{
     width: 180px;
+}
+.main-bottom-pad{
+    height: 150px;
+}
+.card .card-content {
+    padding: 10px 0 0 10px;
+}
+.btn-floating.halfway-fab{
+    right: 10px;
 }
 }
 

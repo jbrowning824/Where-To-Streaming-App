@@ -72,6 +72,10 @@ $(document).ready(function(){
         instance.open();
         populateModal(this);
     });
+
+    $('.clear-input').click(() => {
+        $('#search').val('');
+    })
   });
 
 function mockAPI(){
