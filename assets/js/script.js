@@ -51,7 +51,6 @@ var streamingLogos = [{
 ];
 var genres = [{
     genre: "Adventure",
-    img: "",
     value: 12
 },
 
@@ -73,8 +72,6 @@ $(document).ready(function(){
         instance.open();
         populateModal(this);
     });
-    
-    $('.destroy-modal')
   });
 
 function mockAPI(){
@@ -290,7 +287,7 @@ function mockAPI(){
 function addMovieCard(movie) {
     
         var col = $("<div></div>").addClass("col s6 m4 l3 col-container");
-        var newCard = $("<div></div>").addClass("card");
+        var newCard = $("<div></div>").addClass("card #616161 grey darken-2");
         var cardImg = $("<div></div>").addClass("card-image").css("background-image", `url(${movie.poster})`);
         //removed for now due to issues with font color against movie poster
         //var title = $("<span></span>").addClass("card-title").text(movie.title);
@@ -341,7 +338,8 @@ function populateModal(event){
     var movies = JSON.parse(localStorage.getItem('movies'));
     var movie = movies.find(m => m.imdbId === event.id);
     var text = $('<p></p>').text(JSON.stringify(movie));
-    $('.modal-content').append(text);
+    var header = $('<h4></h4>').addClass('modal-header').text(movie.title);
+    $('.modal-content').append(header,text);
 }
 
 
