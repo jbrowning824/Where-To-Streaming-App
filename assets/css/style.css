@@ -98,8 +98,6 @@ input[type=search]:focus:not(.browser-default){
 .movie-quick-info{
     list-style-type: none;
 }
-
-
 .movie-title{
     width: 250px;
     display: block;
@@ -107,10 +105,68 @@ input[type=search]:focus:not(.browser-default){
     overflow: hidden;
     text-overflow: ellipsis;
 }
+.modal {
+    width: 75%;
+}
+.movie-modal{
+    border-radius: 5px;
+}
+
+
+.modal-close{
+    color: #ffab40 ;
+}
+.modal-content{
+    width: 100%;
+    height: 100%;
+    color: white;
+}
+.movie-content{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap-reverse;
+    justify-content: space-between;
+    align-items: flex-end;
+    width: 100%;
+
+}
+.movie-info{
+    display: inline-block;
+    position: relative;
+    word-wrap: break-word;
+    max-width: 450px;
+
+}
+.movie-trailer{
+    display: inline-block;
+    position: relative;
+    margin-top: 0;
+    padding-top: 0;
+    top: 0;
+    max-width: 50%;
+    height: 100%;
+}
+iframe{
+    width: 420px;
+    height: 315px;
+}
+.modal-header{
+
+    word-wrap: break-word;
+    color: white;
+    
+}
+
+
+.trailer{
+    position: absolute;
+    top: 0;    
+}
+
 ::-webkit-scrollbar {
     width: 10px;
   }
-  
+
    
   /* Handle */
   ::-webkit-scrollbar-thumb {
@@ -175,5 +231,54 @@ input[type=search]:not(.browser-default){
 .btn-floating.halfway-fab{
     right: 10px;
 }
+iframe{
+    width: 290px;
+    height: 285px;
+}
+.modal-header{
+    max-width: 350px;
+}
 }
 
+@media only screen and (max-width: 400px) {
+    nav .brand-logo {
+        font-size: 1rem;
+    }
+    .input-field{
+        width: 65%;
+    }
+        .card-image {
+        height: 150px;
+    }
+    .input-field
+    input[type=search]:focus:not(.browser-default){
+        margin-top: 8px;
+    }
+    .input-field
+    input[type=search]:not(.browser-default){
+        margin-top: 8px;
+    }
+    .aside{
+        display: none;
+    }
+    .card-content{
+        font-size: 10px;
+    }
+    .movie-title{
+        width: 150px;
+    }
+    .main-bottom-pad{
+        height: 150px;
+    }
+    .card .card-content {
+        padding: 10px 0 0 10px;
+    }
+    .btn-floating.halfway-fab{
+        right: 10px;
+    }
+    iframe{
+        width: 200px;
+        height: 285px;
+    }
+}
+ 

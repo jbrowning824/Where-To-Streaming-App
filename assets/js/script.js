@@ -341,9 +341,23 @@ function populateModal(event){
     
     var movies = JSON.parse(localStorage.getItem('movies'));
     var movie = movies.find(m => m.imdbId === event.id);
-    var text = $('<p></p>').text(JSON.stringify(movie));
+    var movieInfoWrapper = $('<ul></ul>').addClass('movie-info-wrapper');
+    
     var header = $('<h4></h4>').addClass('modal-header').text(movie.title);
-    $('.modal-content').append(header,text);
+    var trailer = $('<iframe src="https://www.youtube.com/embed/YAHSB8ZUsp0?autoplay=1"></iframe>');
+    var movieInfo = $('<div>/<div)').addClass('movie-info');
+    var movieTrailer = $('<div>/<div)').addClass('movie-trailer');
+    var plot = $('<li></li>').text(movie.plot);
+    var movieContent = $('<div></div>').addClass('movie-content');
+    var rating = movie.ratings.find(r => r.source == "Rotten Tomatoes");
+    var rottenTomatoes = $('<li></li>').text('Rotten Tomatoes: ' + rating.value);
+    $('.modal-content').append(movieContent);
+    $('.movie-content').append(movieInfo,movieTrailer);
+
+    $('.movie-info').append(header,movieInfoWrapper);
+    $('.movie-trailer').append(trailer);
+    $('.movie-info-wrapper').append(rottenTomatoes);
+    $('.movie-info-wrapper').append(plot);
 }
 
 
