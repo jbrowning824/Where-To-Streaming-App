@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+      <link rel="stylesheet" href="./assets/css/style.css">
+      <link rel="icon" type="image/x-icon" href="./assets/images/favicon/popcorn.png">
+      <title>StreamLine Cinema</title>
+  </head>
+  <body>
+    <div>
+      <!-- Navbar and Search -->
+      <nav>
+        <div class="nav-wrapper #424242 grey darken-3">
+          <a class="brand-logo right">StreamLine Cinemas</a>
+            <form>
+              <div class="input-field left">
+                <input id="search" type="search" required placeholder="Search by movie title...">
+                <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+                <i class="material-icons clear-input">close</i>
+              </div>
+            </form>
+        </div>
+      </nav>
+
+      <!-- Page Layout here -->
+      <div class="row content">
+        <!-- Aside Layout for Genres -->
+        <div class="col s12 m2 l2 aside #424242 grey darken-3">
+          <h5>Genres:</h5>
+          <ul>
+            <li>Adventure</li>
+            <li>Action</li>
+            <li>Crime</li>
+            <li>Drama</li>
+            <li>Documentary</li>
+            <li>Horror</li>
+            <li>Romance</li>
+          </ul>
+        </div>
+
+        <!-- Main Content for Movie Cards -->
+        <div class="col s12 m10 l10 #424242 grey darken-3 main">
+          <div class="row card-container">
+            <!-- Populated through JQuery -->
+          </div>
+          <!-- Workaround for Scrolling to Bottom -->
+          <p class="main-bottom-pad"></p>
+        </div>
+      </div>
+
+      <!-- Modal Layout Here -->
+      <div id="movie-full-info" class="modal modal-fixed-footer movie-modal">
+        <div class="modal-content"></div>
+        <div class="modal-footer">
+          <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+        </div>
+      </div>
+    </div>
+    
+    <script
+    src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+    crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="./assets/js/script.js"></script>
+  </body>
+</html>
