@@ -56,6 +56,15 @@ var genres = [{
 
 ]
 
+
+
+const storedMovies = []
+
+
+var httpOptions = {
+    cache: "no-cache",
+}
+
 var cardContainer = $('.card-container');
 
 
@@ -66,11 +75,21 @@ $(document).ready(function(){
         }
     });
 
-    $('.open-modal').click(function(){
+    $('#movie-full-info').click(function(){
+        console.log('modal clicked');
         var instance = M.Modal.getInstance($('#movie-full-info'));
-
+        
         instance.open();
         populateModal(this);
+    });
+
+    $("form").submit(function(){
+        event.preventDefault();
+        var result = $('#search').val()
+        var cardParent = $('.card-container');
+        cardParent.empty();
+        $('#search').val('');
+        getSearchResults(result);
     });
 
     $('.clear-input').click(() => {
@@ -281,30 +300,28 @@ function mockAPI(){
             value: "64/100"
         }]
     }]
-
-    localStorage.setItem("movies", JSON.stringify(movies));
-    movies.forEach((movie) => {
-        addMovieCard(movie);
-    });
+    console.log(movies);
+    //localStorage.setItem("movies", JSON.stringify(movies));
+    // movies.forEach((movie) => {
+    //     addMovieCard(movie);
+    // });
 }
 
 function addMovieCard(movie) {
     
         var col = $("<div></div>").addClass("col s6 m4 l3 col-container");
         var newCard = $("<div></div>").addClass("card #616161 grey darken-2");
-        var cardImg = $("<div></div>").addClass("card-image").css("background-image", `url(${movie.poster})`);
-        //removed for now due to issues with font color against movie poster
-        //var title = $("<span></span>").addClass("card-title").text(movie.title);
+        var cardImg = $("<div></div>").addClass("card-image").css("background-image", `url(${movie.Poster})`);
         var addSaveButton = $("<a></a>").addClass("btn-floating btn-small halfway-fab waves-effect waves-light red");
         var icon = $("<i></i>").addClass("material-icons").text("favorite_border");
         var cardContent = $("<div></div>").addClass("card-content");
         var logoListContainer = $("<ul></ul>").addClass("logos");
         var movieInfo = $("<ul></ul>").addClass("movie-quick-info");
-        var infoTitle = $("<li></li>").addClass("movie-title").text(`${movie.title}`);
-        var infoRating = $("<li></li>").text(`Rating: ${movie.rated}`);
-        var infoRuntime = $("<li></li>").text(`Runtime: ${movie.runtime}`);
+        var infoTitle = $("<li></li>").addClass("movie-title").text(`${movie.Title}`);
+        var infoRating = $("<li></li>").text(`Rating: ${movie.Rated}`);
+        var infoRuntime = $("<li></li>").text(`Runtime: ${movie.Runtime}`);
         var cardFooter = $("<div></div").addClass("card-action");
-        var openModel = $("<a></a>", {href: "#movie-full-info",id: movie.imdbId}).addClass("open-modal").text("More Info");
+        var openModel = $("<a></a>", {href: "#movie-full-info",id: movie.imdbID}).addClass("open-modal").text("More Info");
 
         cardContainer.append(col);
         col.append(newCard);
@@ -328,7 +345,15 @@ function addMovieCard(movie) {
         // });
 }
 
+async function fetchMovies(searchResult) {
+    const response = await fetch("https://www.omdbapi.com/?s="+ searchResult + "&apikey=ec949a25", httpOptions);
+    return await response.json();
+}
 
+async function fetchMoviesId(id) {
+    const response = await fetch("https://www.omdbapi.com/?i="+ id +"&apikey=ec949a25", httpOptions);
+    return await response.json();
+}
 
 
 
@@ -340,17 +365,18 @@ function populateModal(event){
     console.log(event);
     
     var movies = JSON.parse(localStorage.getItem('movies'));
-    var movie = movies.find(m => m.imdbId === event.id);
+    console.log(movies);
+    var movie = movies.find(m => m.imdbID === event.id);
     var movieInfoWrapper = $('<ul></ul>').addClass('movie-info-wrapper');
     
-    var header = $('<h4></h4>').addClass('modal-header').text(movie.title);
+    var header = $('<h4></h4>').addClass('modal-header').text(movie.Title);
     var trailer = $('<iframe src="https://www.youtube.com/embed/YAHSB8ZUsp0?autoplay=1"></iframe>');
     var movieInfo = $('<div>/<div)').addClass('movie-info');
     var movieTrailer = $('<div>/<div)').addClass('movie-trailer');
-    var plot = $('<li></li>').text(movie.plot);
+    var plot = $('<li></li>').text(movie.Plot);
     var movieContent = $('<div></div>').addClass('movie-content');
-    var rating = movie.ratings.find(r => r.source == "Rotten Tomatoes");
-    var rottenTomatoes = $('<li></li>').text('Rotten Tomatoes: ' + rating.value);
+    var rating = movie.Ratings.find(r => r.Source == "Rotten Tomatoes");
+    var rottenTomatoes = $('<li></li>').text('Rotten Tomatoes: ' + rating.Value);
     $('.modal-content').append(movieContent);
     $('.movie-content').append(movieInfo,movieTrailer);
 
@@ -360,12 +386,17 @@ function populateModal(event){
     $('.movie-info-wrapper').append(plot);
 }
 
+async function getSearchResults(result){
+    
+    searchMovieTitles = await fetchMovies(result)
 
-
-function init() {
-    mockAPI();
+    searchMovieTitles.Search.forEach(async(movie) => {
+        var movieResult = await fetchMoviesId(movie.imdbID);
+        storedMovies.push(movieResult);
+        let newStoredMovies = storedMovies;
+        addMovieCard(movieResult);
+        localStorage.setItem("movies", JSON.stringify(newStoredMovies));
+    })    
 }
 
-init();
-    
 
