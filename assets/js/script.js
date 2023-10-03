@@ -58,7 +58,7 @@ var genres = [{
 
 
 
-const storedMovies = []
+const storedMovies = {};
 
 
 var httpOptions = {
@@ -75,13 +75,12 @@ $(document).ready(function(){
         }
     });
 
-    $('#movie-full-info').click(function(){
-        console.log('modal clicked');
+    $('.card-container').on("click", `a[href="#more-info"]`, ((event) => {
         var instance = M.Modal.getInstance($('#movie-full-info'));
         
         instance.open();
-        populateModal(this);
-    });
+        populateModal(event.target);
+    }));
 
     $("form").submit(function(){
         event.preventDefault();
@@ -300,7 +299,7 @@ function mockAPI(){
             value: "64/100"
         }]
     }]
-    console.log(movies);
+   
     //localStorage.setItem("movies", JSON.stringify(movies));
     // movies.forEach((movie) => {
     //     addMovieCard(movie);
@@ -308,7 +307,6 @@ function mockAPI(){
 }
 
 function addMovieCard(movie) {
-    
         var col = $("<div></div>").addClass("col s6 m4 l3 col-container");
         var newCard = $("<div></div>").addClass("card #616161 grey darken-2");
         var cardImg = $("<div></div>").addClass("card-image").css("background-image", `url(${movie.Poster})`);
@@ -321,7 +319,7 @@ function addMovieCard(movie) {
         var infoRating = $("<li></li>").text(`Rating: ${movie.Rated}`);
         var infoRuntime = $("<li></li>").text(`Runtime: ${movie.Runtime}`);
         var cardFooter = $("<div></div").addClass("card-action");
-        var openModel = $("<a></a>", {href: "#movie-full-info",id: movie.imdbID}).addClass("open-modal").text("More Info");
+        var openModel = $("<a></a>", {href: "#more-info",id: movie.imdbID}).addClass("open-modal").text("More Info");
 
         cardContainer.append(col);
         col.append(newCard);
@@ -355,20 +353,13 @@ async function fetchMoviesId(id) {
     return await response.json();
 }
 
-
-
 function addGeneres(){
 
 }
 
 function populateModal(event){   
-    console.log(event);
-    
-    var movies = JSON.parse(localStorage.getItem('movies'));
-    console.log(movies);
-    var movie = movies.find(m => m.imdbID === event.id);
+    var movie = storedMovies[event.id];
     var movieInfoWrapper = $('<ul></ul>').addClass('movie-info-wrapper');
-    
     var header = $('<h4></h4>').addClass('modal-header').text(movie.Title);
     var trailer = $('<iframe src="https://www.youtube.com/embed/YAHSB8ZUsp0?autoplay=1"></iframe>');
     var movieInfo = $('<div>/<div)').addClass('movie-info');
@@ -377,9 +368,9 @@ function populateModal(event){
     var movieContent = $('<div></div>').addClass('movie-content');
     var rating = movie.Ratings.find(r => r.Source == "Rotten Tomatoes");
     var rottenTomatoes = $('<li></li>').text('Rotten Tomatoes: ' + rating.Value);
+
     $('.modal-content').append(movieContent);
     $('.movie-content').append(movieInfo,movieTrailer);
-
     $('.movie-info').append(header,movieInfoWrapper);
     $('.movie-trailer').append(trailer);
     $('.movie-info-wrapper').append(rottenTomatoes);
@@ -392,11 +383,10 @@ async function getSearchResults(result){
 
     searchMovieTitles.Search.forEach(async(movie) => {
         var movieResult = await fetchMoviesId(movie.imdbID);
-        storedMovies.push(movieResult);
-        let newStoredMovies = storedMovies;
+        storedMovies[movie.imdbID] = movieResult;
         addMovieCard(movieResult);
-        localStorage.setItem("movies", JSON.stringify(newStoredMovies));
-    })    
+        localStorage.setItem("movies", JSON.stringify(storedMovies));
+    });    
 }
 
 
