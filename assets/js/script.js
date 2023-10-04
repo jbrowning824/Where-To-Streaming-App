@@ -354,20 +354,41 @@ async function fetchMoviesId(id) {
 }
 
 function addGeneres(){
+   
 
 }
 
+async function trailerModal(id){
+    const apiUrl = "https://api.kinocheck.com/?imdb_id=";
+     const response = await fetch(apiUrl + id,{mode: 'no-cors'});
+     var youtubeID = await response.json.data.youtube_video_id();
+     console.log(youtubeID)
+     return youtubeID
+    
+   }
+
+
+
+
+
+
 function populateModal(event){   
+    var trailerURL = trailerModal(event.id)
     var movie = storedMovies[event.id];
     var movieInfoWrapper = $('<ul></ul>').addClass('movie-info-wrapper');
     var header = $('<h4></h4>').addClass('modal-header').text(movie.Title);
-    var trailer = $('<iframe src="https://www.youtube.com/embed/YAHSB8ZUsp0?autoplay=1"></iframe>');
+    var trailer = $('<iframe src=> "https://www.youtube.com/embed/' + trailerURL + '?autoplay=1"</iframe>');
     var movieInfo = $('<div>/<div)').addClass('movie-info');
     var movieTrailer = $('<div>/<div)').addClass('movie-trailer');
     var plot = $('<li></li>').text(movie.Plot);
     var movieContent = $('<div></div>').addClass('movie-content');
     var rating = movie.Ratings.find(r => r.Source == "Rotten Tomatoes");
     var rottenTomatoes = $('<li></li>').text('Rotten Tomatoes: ' + rating.Value);
+    
+
+
+
+
 
     $('.modal-content').append(movieContent);
     $('.movie-content').append(movieInfo,movieTrailer);
@@ -375,6 +396,7 @@ function populateModal(event){
     $('.movie-trailer').append(trailer);
     $('.movie-info-wrapper').append(rottenTomatoes);
     $('.movie-info-wrapper').append(plot);
+
 }
 
 async function getSearchResults(result){
