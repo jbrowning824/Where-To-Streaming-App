@@ -49,14 +49,34 @@ var streamingLogos = [{
     height: "11px"
 }
 ];
-var genres = [{
-    genre: "Adventure",
-    value: 12
-},
+var genres = {
+    12: "Adventure",
+    14: "Fantasy",
+    16: "Animation",
+    18: "Drama",
+    27: "Horror",
+    28: "Action",
+    35: "Comedy",
+    36: "History",
+    37: "Western",
+    53: "Thriller",
+    80: "Crime",
+    99: "Documentary",
+    878 :"Science Fiction",
+    9648: "Mystery",
+    10402: "Music",
+    10749: "Romance",
+    10751: "Family",
+    10752: "War",
+    10763: "News",
+    10764: "Reality",
+    10767: "Talk Show"
+}
 
-]
 
-
+var services = ['netflix', 'prime.subscription','hbo,hulu.addon.hbo,prime.addon.hbomaxus',
+'prime.rent,prime.buy,apple.rent,apple.buy','hulu.subscription,hulu.addon.hbo',
+'apple.addon', 'peacock.free'];
 
 const storedMovies = {};
 
@@ -66,7 +86,6 @@ var httpOptions = {
 }
 
 var cardContainer = $('.card-container');
-
 
 $(document).ready(function(){
     $('.modal').modal({
@@ -85,16 +104,23 @@ $(document).ready(function(){
     $("form").submit(function(){
         event.preventDefault();
         var result = $('#search').val()
-        var cardParent = $('.card-container');
-        cardParent.empty();
+        
+        cardContainer.empty();
         $('#search').val('');
         getSearchResults(result);
     });
 
     $('.clear-input').click(() => {
         $('#search').val('');
-    })
+    });
+
+    $('#genres').click((event) => {
+        cardContainer.empty();
+        var result = [$(event.target).text()];
+        getGenreResults(result)
+        
   });
+});
 
 function mockAPI(){
     var movies = [{
@@ -307,6 +333,7 @@ function mockAPI(){
 }
 
 function addMovieCard(movie) {
+    if(movie.Title != undefined){
         var col = $("<div></div>").addClass("col s6 m4 l3 col-container");
         var newCard = $("<div></div>").addClass("card #616161 grey darken-2");
         var cardImg = $("<div></div>").addClass("card-image").css("background-image", `url(${movie.Poster})`);
@@ -329,6 +356,10 @@ function addMovieCard(movie) {
         cardContent.append(logoListContainer, movieInfo);
         movieInfo.append(infoTitle, infoRating, infoRuntime);
         cardFooter.append(openModel);
+    }
+    else{
+        console.log("not a movie ", movie);
+    }
 
         // streamingLogos.forEach((logo) => {
         //     console.log(logo.img);
@@ -344,17 +375,33 @@ function addMovieCard(movie) {
 }
 
 async function fetchMovies(searchResult) {
-    const response = await fetch("https://www.omdbapi.com/?s="+ searchResult + "&apikey=ec949a25", httpOptions);
+    const response = await fetch("https://www.omdbapi.com/?s="+ searchResult + "&apikey=5b9195cb", httpOptions);
     return await response.json();
 }
 
 async function fetchMoviesId(id) {
-    const response = await fetch("https://www.omdbapi.com/?i="+ id +"&apikey=ec949a25", httpOptions);
+    const response = await fetch("https://www.omdbapi.com/?i="+ id +"&apikey=5b9195cb", httpOptions);
+    return await response.json();
+}
+
+async function fetchMoviesGenre(id) {
+    httpOptionsRapidApi = {
+        headers: {
+            'X-RapidAPI-Key': '1de57e26a3mshbc15d44f8417944p1c87fdjsn674c6b674140',
+            'X-RapidAPI-Host': 'streaming-availability.p.rapidapi.com'
+        }
+    }
+    const response = await fetch("https://streaming-availability.p.rapidapi.com/search/filters?services="+ 
+        services.toString() +"&country=us&output_language=en&genres=" + id 
+        +"&genres_relation=and&show_type=movie", httpOptionsRapidApi);
     return await response.json();
 }
 
 function addGeneres(){
-
+    for(const [key, value] of Object.entries(genres)){
+        var genreListItem = $('<li></li>').text(value);
+        $('#genres').append(genreListItem);
+    }
 }
 
 function populateModal(event){   
@@ -379,14 +426,35 @@ function populateModal(event){
 
 async function getSearchResults(result){
     
-    searchMovieTitles = await fetchMovies(result)
-
+    searchMovieTitles = await fetchMovies(result);
     searchMovieTitles.Search.forEach(async(movie) => {
-        var movieResult = await fetchMoviesId(movie.imdbID);
-        storedMovies[movie.imdbID] = movieResult;
-        addMovieCard(movieResult);
-        localStorage.setItem("movies", JSON.stringify(storedMovies));
-    });    
+    getEachMovie(movie.imdbID);
+    });
 }
 
+async function getGenreResults(results){
+    var genreId = "";
+    results.forEach(async (result) => {
+        genreId += (Object.keys(genres,result)
+            .find(key => genres[key] === result)).toString() + ",";
+        })
+        var movieGenreResults = await fetchMoviesGenre(genreId);
+        console.log(movieGenreResults);
+        movieGenreResults.result.forEach(async(movie) => {
+            getEachMovie(movie.imdbId);
+            });
+    }
 
+
+async function getEachMovie(imdbID){
+        var movieResult = await fetchMoviesId(imdbID);
+        storedMovies[imdbID] = movieResult;
+        addMovieCard(movieResult);
+        //localStorage.setItem("movies", JSON.stringify(storedMovies));
+}
+
+async function init(){
+    addGeneres();
+    await getGenreResults(["Horror", "Comedy", "Action"]);
+}
+init();
