@@ -196,32 +196,52 @@ function addGeneres(){
         $('#genres').append(genreListItem);
     }
 }
-async function getTrailer(){
-    var response = await fetch("https://bootcamp-movietrailer.azurewebsites.net/api/Function1?id=tt4154796",
+async function getTrailer(id){
+    var response = await fetch("https://bootcamp-movietrailer.azurewebsites.net/api/Function1?id=" + id,
     {headers: {
         'x-functions-key': 'NS4_Xn9DxrWabt2clUfPI9CF92SgUV2rwkZVIyk_HVIoAzFuqR0TLg=='}})
     return await response.json();
 }
 
 async function populateModal(event){   
+    
     var movie = storedMovies[event.id];
-    var youtube_id = await getTrailer();
+    var trailerResponse = await getTrailer(event.id);
+    if(youtube_id){
+        
+        var trailer = $('<iframe src="https://www.youtube.com/embed/'+ youtube_id +'?autoplay=1"></iframe>');
+        var youtube_id = trailerResponse.trailer.youtube_video_id;
+    }
+    
     var movieInfoWrapper = $('<ul></ul>').addClass('movie-info-wrapper');
     var header = $('<h4></h4>').addClass('modal-header').text(movie.Title);
-    var trailer = $('<iframe src="https://www.youtube.com/embed/'+ youtube_id +'?autoplay=1"></iframe>');
+    
     var movieInfo = $('<div>/<div)').addClass('movie-info');
     var movieTrailer = $('<div>/<div)').addClass('movie-trailer');
     var plot = $('<li></li>').text(movie.Plot);
     var movieContent = $('<div></div>').addClass('movie-content');
     var rating = movie.Ratings.find(r => r.Source == "Rotten Tomatoes");
     var rottenTomatoes = $('<li></li>').text('Rotten Tomatoes: ' + rating.Value);
+    var logoListContainer = $('<ul></ul>').addClass('logo-list-container');
 
     $('.modal-content').append(movieContent);
     $('.movie-content').append(movieInfo,movieTrailer);
-    $('.movie-info').append(header,movieInfoWrapper);
+    $('.movie-info').append(header,movieInfoWrapper, logoListContainer);
     $('.movie-trailer').append(trailer);
     $('.movie-info-wrapper').append(rottenTomatoes);
     $('.movie-info-wrapper').append(plot);
+
+    streamingLogos.forEach((logo) => {
+        console.log(logo.img);
+        var logoList = $("<li></li>");
+        var logoImg = $('<img />',
+                            {
+                            src: logo.img,
+                            height: logo.height 
+                            });
+        logoListContainer.append(logoList);
+        logoList.append(logoImg);
+    });
 }
 
 async function getSearchResults(result){
