@@ -49,15 +49,43 @@ var streamingLogos = [{
     height: "11px"
 }
 ];
-var genres = [{
-    genre: "Adventure",
-    value: 12
-},
+var genres = {
+    12: "Adventure",
+    14: "Fantasy",
+    16: "Animation",
+    18: "Drama",
+    27: "Horror",
+    28: "Action",
+    35: "Comedy",
+    36: "History",
+    37: "Western",
+    53: "Thriller",
+    80: "Crime",
+    99: "Documentary",
+    878 :"Science Fiction",
+    9648: "Mystery",
+    10402: "Music",
+    10749: "Romance",
+    10751: "Family",
+    10752: "War",
+    10763: "News",
+    10764: "Reality",
+    10767: "Talk Show"
+}
 
-]
+
+var services = ['netflix', 'prime.subscription','hbo,hulu.addon.hbo,prime.addon.hbomaxus',
+'prime.rent,prime.buy,apple.rent,apple.buy','hulu.subscription,hulu.addon.hbo',
+'apple.addon', 'peacock.free'];
+
+const storedMovies = {};
+
+
+var httpOptions = {
+    cache: "no-cache",
+}
 
 var cardContainer = $('.card-container');
-
 
 $(document).ready(function(){
     $('.modal').modal({
@@ -66,245 +94,49 @@ $(document).ready(function(){
         }
     });
 
-    $('.open-modal').click(function(){
+    $('.card-container').on("click", `a[href="#more-info"]`, ((event) => {
         var instance = M.Modal.getInstance($('#movie-full-info'));
-
+        //need to add streaming icons function that fires from here.
         instance.open();
-        populateModal(this);
+        populateModal(event.target);
+    }));
+
+    $("form").submit(function(){
+        event.preventDefault();
+        var result = $('#search').val()
+        
+        cardContainer.empty();
+        $('#search').val('');
+        getSearchResults(result);
     });
 
     $('.clear-input').click(() => {
         $('#search').val('');
-    })
-  });
-
-function mockAPI(){
-    var movies = [{
-        title: "Batman",
-        imdbId: "tt1877830",
-        year: 2022,
-        released: "04 Mar 2022",
-        director: "Matt Reeves",
-        genres: [{
-            id: 28,
-            name: "Action"
-        },
-        {   
-            id: 80,
-            name: "Crime"
-        }],
-        poster: "https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTYtMDIzNi00NGVlLWIzMDYtZTk3MTQ3NGQxZGEwXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_SX300.jpg",
-        rated: "PG-13",
-        runtime: "176 min",
-        plot: "When a sadistic serial killer begins murdering key political figures in Gotham, Batman is forced to investigate the city's hidden corruption and question his family's involvement.",
-        ratings: [{
-            source: "Internet Movie Database",
-            value: "7.8/10"
-        },
-        {
-            source: "Rotten Tomatoes",
-            value: "85%"
-        },
-        {
-            source: "Metacritic",
-            value: "72/100"
-        }]
-    },
-    {
-        title: "Scott Pilgrim vs. the World",
-        imdbId: "tt0446029",
-        year: 2010,
-        released: "13 Aug 2010",
-        director: "Edgar Wright",
-        genres: [{
-            id: 28,
-            name: "Action"
-        },
-        {   
-            id: 35,
-            name: "Comedy"
-        },
-        {   
-            id: 14,
-            name: "Fantasy"
-        }],
-        poster: "https://m.media-amazon.com/images/M/MV5BNWI5ODc4MTAtN2U2NC00ZDk3LWE3NjAtNjIyODE2YTlhYjYwXkEyXkFqcGdeQXVyOTA3ODI3NDA@._V1_SX300.jpg",
-        rated: "PG-13",
-        runtime: "112 min",
-        plot: "In a magically realistic version of Toronto, a young man must defeat his new girlfriend's seven evil exes one by one in order to win her heart.",
-        ratings: [{
-            source: "Internet Movie Database",
-            value: "7.5/10"
-        },
-        {
-            source: "Rotten Tomatoes",
-            value: "82%"
-        },
-        {
-            source: "Metacritic",
-            value: "69/100"
-        }]
-    },
-    {
-        title: "Need for Speed",
-        imdbId: "tt2369135",
-        year: 2014,
-        released: "14 Mar 2014",
-        director: "Scott Waugh",
-        genres: [{
-            id: 28,
-            name: "Action"
-        },
-        {   
-            id: 12,
-            name: "Adventure"
-        }],
-        poster: "https://m.media-amazon.com/images/M/MV5BMTQ3ODY4NzYzOF5BMl5BanBnXkFtZTgwNjI3OTE4MDE@._V1_SX300.jpg",
-        rated: "PG-13",
-        runtime: "132 min",
-        plot: "Fresh from prison, a street racer who was framed by a wealthy business associate joins a cross-country race with revenge in mind. His ex-partner, learning of the plan, places a massive bounty on his head as the race begins.",
-        ratings: [{
-            source: "Internet Movie Database",
-            value: "6.4/10"
-        },
-        {
-            source: "Rotten Tomatoes",
-            value: "23%"
-        },
-        {
-            source: "Metacritic",
-            value: "39/100"
-        }]
-    },
-    {
-        title: "Pixels",
-        imdbId: "tt2120120",
-        year: 2015,
-        released: "24 Jul 2015",
-        director: "Chris Columbus",
-        genres: [{
-            id: 28,
-            name: "Action"
-        },
-        {   
-            id: 35,
-            name: "Comedy"
-        },
-        {   
-            id: 14,
-            name: "Fantasy"
-        }],
-        poster: "https://m.media-amazon.com/images/M/MV5BMTIzNDYzMzgtZWMzNS00ODc2LTg2ZmMtOTE2MWZkNzIxMmQ0XkEyXkFqcGdeQXVyNjQ3MDg0MTY@._V1_SX300.jpg",
-        rated: "PG-13",
-        runtime: "132 min",
-        plot: "When aliens misinterpret video feeds of classic arcade games as a declaration of war, they attack the Earth in the form of the video games.",
-        ratings: [{
-            source: "Internet Movie Database",
-            value: "5.6/10"
-        },
-        {
-            source: "Rotten Tomatoes",
-            value: "18%"
-        },
-        {
-            source: "Metacritic",
-            value: "27/100"
-        }]
-    },
-    {
-        title: "The Other Guys",
-        imdbId: "tt1386588",
-        year: 2010,
-        released: "06 Aug 2010",
-        director: "Chris Columbus",
-        genres: [{
-            id: 28,
-            name: "Action"
-        },
-        {   
-            id: 35,
-            name: "Comedy"
-        },
-        {   
-            id: 80,
-            name: "Crime"
-        }],
-        poster: "https://m.media-amazon.com/images/M/MV5BMDlhZDQ5NDUtNDcwMi00MTQ5LTk1Y2UtYjNmMjgzNzNhNzU3XkEyXkFqcGdeQXVyODE5NzE3OTE@._V1_SX300.jpg",
-        rated: "PG-13",
-        runtime: "107 min",
-        plot: "Two mismatched New York City detectives seize an opportunity to step up like the city's top cops, whom they idolize, only things don't quite go as planned.",
-        ratings: [{
-            source: "Internet Movie Database",
-            value: "6.6/10"
-        },
-        {
-            source: "Rotten Tomatoes",
-            value: "79%"
-        },
-        {
-            source: "Metacritic",
-            value: "64/100"
-        }]
-    },
-    {
-        title: "Ready Player One",
-        imdbId: "tt1677720",
-        year: 2018,
-        released: "29 Mar 2018",
-        director: "Steven Spielberg",
-        genres: [{
-            id: 28,
-            name: "Action"
-        },
-        {   
-            id: 12,
-            name: "Adventure"
-        },
-        {   
-            id: 878,
-            name: "Science Fiction"
-        }],
-        poster: "https://m.media-amazon.com/images/M/MV5BY2JiYTNmZTctYTQ1OC00YjU4LWEwMjYtZjkwY2Y5MDI0OTU3XkEyXkFqcGdeQXVyNTI4MzE4MDU@._V1_SX300.jpg",
-        rated: "PG-13",
-        runtime: "140 min",
-        plot: "When the creator of a virtual reality called the OASIS dies, he makes a posthumous challenge to all OASIS users to find his Easter Egg, which will give the finder his fortune and control of his world.",
-        ratings: [{
-            source: "Internet Movie Database",
-            value: "7.4/10"
-        },
-        {
-            source: "Rotten Tomatoes",
-            value: "72%"
-        },
-        {
-            source: "Metacritic",
-            value: "64/100"
-        }]
-    }]
-
-    localStorage.setItem("movies", JSON.stringify(movies));
-    movies.forEach((movie) => {
-        addMovieCard(movie);
     });
-}
+
+    $('#genres').click((event) => {
+        cardContainer.empty();
+        var result = [$(event.target).text()];
+        getGenreResults(result)
+        
+  });
+});
 
 function addMovieCard(movie) {
-    
+    if(movie.Title != undefined){
         var col = $("<div></div>").addClass("col s6 m4 l3 col-container");
         var newCard = $("<div></div>").addClass("card #616161 grey darken-2");
-        var cardImg = $("<div></div>").addClass("card-image").css("background-image", `url(${movie.poster})`);
-        //removed for now due to issues with font color against movie poster
-        //var title = $("<span></span>").addClass("card-title").text(movie.title);
+        var cardImg = $("<div></div>").addClass("card-image").css("background-image", `url(${movie.Poster})`);
         var addSaveButton = $("<a></a>").addClass("btn-floating btn-small halfway-fab waves-effect waves-light red");
         var icon = $("<i></i>").addClass("material-icons").text("favorite_border");
         var cardContent = $("<div></div>").addClass("card-content");
         var logoListContainer = $("<ul></ul>").addClass("logos");
         var movieInfo = $("<ul></ul>").addClass("movie-quick-info");
-        var infoTitle = $("<li></li>").addClass("movie-title").text(`${movie.title}`);
-        var infoRating = $("<li></li>").text(`Rating: ${movie.rated}`);
-        var infoRuntime = $("<li></li>").text(`Runtime: ${movie.runtime}`);
+        var infoTitle = $("<li></li>").addClass("movie-title").text(`${movie.Title}`);
+        var infoRating = $("<li></li>").text(`Rating: ${movie.Rated}`);
+        var infoRuntime = $("<li></li>").text(`Runtime: ${movie.Runtime}`);
         var cardFooter = $("<div></div").addClass("card-action");
-        var openModel = $("<a></a>", {href: "#movie-full-info",id: movie.imdbId}).addClass("open-modal").text("More Info");
+        var openModel = $("<a></a>", {href: "#more-info",id: movie.imdbID}).addClass("open-modal").text("More Info");
 
         cardContainer.append(col);
         col.append(newCard);
@@ -314,58 +146,116 @@ function addMovieCard(movie) {
         cardContent.append(logoListContainer, movieInfo);
         movieInfo.append(infoTitle, infoRating, infoRuntime);
         cardFooter.append(openModel);
+    }
+    else{
+        console.log("not a movie ", movie);
+    }
 
-        // streamingLogos.forEach((logo) => {
-        //     console.log(logo.img);
-        //     var logoList = $("<li></li>");
-        //     var logoImg = $('<img />',
-        //                         {
-        //                            src: logo.img,
-        //                            height: logo.height 
-        //                         });
-        //     logoListContainer.append(logoList);
-        //     logoList.append(logoImg);
-        // });
+        
+}
+function getStreamingLogos(){
+    streamingLogos.forEach((logo) => {
+        console.log(logo.img);
+        var logoList = $("<li></li>");
+        var logoImg = $('<img />',
+                            {
+                            src: logo.img,
+                            height: logo.height 
+                            });
+        logoListContainer.append(logoList);
+        logoList.append(logoImg);
+    });
 }
 
+async function fetchMovies(searchResult) {
+    const response = await fetch("https://www.omdbapi.com/?s="+ searchResult + "&apikey=5b9195cb", httpOptions);
+    return await response.json();
+}
 
+async function fetchMoviesId(id) {
+    const response = await fetch("https://www.omdbapi.com/?i="+ id +"&apikey=5b9195cb", httpOptions);
+    return await response.json();
+}
 
-
+async function fetchMoviesGenre(id) {
+    httpOptionsRapidApi = {
+        headers: {
+            'X-RapidAPI-Key': '1de57e26a3mshbc15d44f8417944p1c87fdjsn674c6b674140',
+            'X-RapidAPI-Host': 'streaming-availability.p.rapidapi.com'
+        }
+    }
+    const response = await fetch("https://streaming-availability.p.rapidapi.com/search/filters?services="+ 
+        services.toString() +"&country=us&output_language=en&genres=" + id 
+        +"&genres_relation=and&show_type=movie", httpOptionsRapidApi);
+    return await response.json();
+}
 
 function addGeneres(){
-
+    for(const [key, value] of Object.entries(genres)){
+        var genreListItem = $('<li></li>').text(value);
+        $('#genres').append(genreListItem);
+    }
+}
+async function getTrailer(){
+    var response = await fetch("https://bootcamp-movietrailer.azurewebsites.net/api/Function1?id=tt4154796",
+    {headers: {
+        'x-functions-key': 'NS4_Xn9DxrWabt2clUfPI9CF92SgUV2rwkZVIyk_HVIoAzFuqR0TLg=='}})
+    return await response.json();
 }
 
-function populateModal(event){   
-    console.log(event);
-    
-    var movies = JSON.parse(localStorage.getItem('movies'));
-    var movie = movies.find(m => m.imdbId === event.id);
+async function populateModal(event){   
+    var movie = storedMovies[event.id];
+    var youtube_id = await getTrailer();
     var movieInfoWrapper = $('<ul></ul>').addClass('movie-info-wrapper');
-    
-    var header = $('<h4></h4>').addClass('modal-header').text(movie.title);
-    var trailer = $('<iframe src="https://www.youtube.com/embed/YAHSB8ZUsp0?autoplay=1"></iframe>');
+    var header = $('<h4></h4>').addClass('modal-header').text(movie.Title);
+    var trailer = $('<iframe src="https://www.youtube.com/embed/'+ youtube_id +'?autoplay=1"></iframe>');
     var movieInfo = $('<div>/<div)').addClass('movie-info');
     var movieTrailer = $('<div>/<div)').addClass('movie-trailer');
-    var plot = $('<li></li>').text(movie.plot);
+    var plot = $('<li></li>').text(movie.Plot);
     var movieContent = $('<div></div>').addClass('movie-content');
-    var rating = movie.ratings.find(r => r.source == "Rotten Tomatoes");
-    var rottenTomatoes = $('<li></li>').text('Rotten Tomatoes: ' + rating.value);
+    var rating = movie.Ratings.find(r => r.Source == "Rotten Tomatoes");
+    var rottenTomatoes = $('<li></li>').text('Rotten Tomatoes: ' + rating.Value);
+
     $('.modal-content').append(movieContent);
     $('.movie-content').append(movieInfo,movieTrailer);
-
     $('.movie-info').append(header,movieInfoWrapper);
     $('.movie-trailer').append(trailer);
     $('.movie-info-wrapper').append(rottenTomatoes);
     $('.movie-info-wrapper').append(plot);
 }
 
+async function getSearchResults(result){
+    
+    searchMovieTitles = await fetchMovies(result);
+    searchMovieTitles.Search.forEach(async(movie) => {
+    getEachMovie(movie.imdbID);
+    });
+}
+
+async function getGenreResults(results){
+    var genreId = "";
+    results.forEach(async (result) => {
+        genreId += (Object.keys(genres,result)
+            .find(key => genres[key] === result)).toString() + ",";
+        })
+        var movieGenreResults = await fetchMoviesGenre(genreId);
+        console.log(movieGenreResults);
+        movieGenreResults.result.forEach(async(movie) => {
+            getEachMovie(movie.imdbId);
+            });
+    }
 
 
-function init() {
-    mockAPI();
+async function getEachMovie(imdbID){
+        var movieResult = await fetchMoviesId(imdbID);
+        storedMovies[imdbID] = movieResult;
+        addMovieCard(movieResult);
+        //localStorage.setItem("movies", JSON.stringify(storedMovies));
+}
+
+async function init(){
+    addGeneres();
+    //await getGenreResults(["Horror", "Comedy", "Action"]);
 }
 
 init();
-    
-
