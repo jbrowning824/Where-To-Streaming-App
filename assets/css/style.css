@@ -91,6 +91,7 @@ input[type=search]:focus:not(.browser-default){
     color: white;
     padding: 0 0 0 10px;
     font-size: 14px;
+
 }
 .btn-floating.halfway-fab{
     right: 20px;
@@ -178,7 +179,13 @@ iframe{
   ::-webkit-scrollbar-thumb:hover {
     background: #616161; 
   }
-
+@media only screen and (max-width: 1360px) {
+    .movie-title{
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 160px;
+    }
+}
 @media only screen and (max-width: 922px) {
 .card-image {
     height: 150px;
@@ -187,13 +194,21 @@ iframe{
     font-size: 8px;
 }
 .movie-title{
-    width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100px;
 }
 .main-bottom-pad{
     height: 150px;
 }
 }
-
+@media only screen and (max-width: 700px) {
+    .movie-title{
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 100px;
+    }
+}
 
 @media only screen and (max-width: 600px) {
 nav .brand-logo {
@@ -220,6 +235,8 @@ input[type=search]:not(.browser-default){
     font-size: 10px;
 }
 .movie-title{
+    overflow: hidden;
+    text-overflow: ellipsis;
     width: 180px;
 }
 .main-bottom-pad{
@@ -265,6 +282,8 @@ iframe{
         font-size: 10px;
     }
     .movie-title{
+        overflow: hidden;
+    text-overflow: ellipsis;
         width: 150px;
     }
     .main-bottom-pad{
@@ -279,6 +298,13 @@ iframe{
     iframe{
         width: 200px;
         height: 285px;
+    }
+}
+@media only screen and (max-width: 400px) {
+    .movie-title{
+        overflow: hidden;
+    text-overflow: ellipsis;
+        width: 100px;
     }
 }
  
