@@ -118,16 +118,41 @@ $(document).ready(function(){
         cardContainer.empty();
         var result = [$(event.target).text()];
         getGenreResults(result)
-        
-  });
-});
 
+    })
+
+
+
+     $('#saved-movies-tab').click(savedMoviesTab())
+    })
+
+
+    function savedButtonClick(movie) {  
+        var savedMovies = JSON.parse(localStorage.getItem('savedMovies')) || [];
+        savedMovies.push(movie);
+        localStorage.setItem('savedMovies', JSON.stringify(savedMovies)); 
+     }
+     function savedMoviesTab(){
+        console.log("calledsavedmovies")
+        var savedMovies =JSON.parse(localStorage.getItem('savedMovies'));
+
+    if (savedMovies.length > 0) {
+        cardContainer.empty()
+        savedMovies.forEach(function (movie){
+       
+         addMovieCard(movie)
+        
+    })}
+        } 
+  
+        
 function addMovieCard(movie) {
     if(movie.Title != undefined){
         var col = $("<div></div>").addClass("col s6 m4 l3 col-container");
         var newCard = $("<div></div>").addClass("card #616161 grey darken-2");
         var cardImg = $("<div></div>").addClass("card-image").css("background-image", `url(${movie.Poster})`);
-        var addSaveButton = $("<a></a>").addClass("btn-floating btn-small halfway-fab waves-effect waves-light red");
+        var addSaveButton = $("<a></a>").addClass("btn-floating btn-small halfway-fab waves-effect waves-light red button-saved")
+        addSaveButton.click(savedButtonClick(movie()))
         var icon = $("<i></i>").addClass("material-icons").text("favorite_border");
         var cardContent = $("<div></div>").addClass("card-content");
         var logoListContainer = $("<ul></ul>").addClass("logos");
@@ -150,22 +175,21 @@ function addMovieCard(movie) {
     else{
         console.log("not a movie ", movie);
     }
+  
+  }
 
-        
-}
-function getStreamingLogos(){
-    streamingLogos.forEach((logo) => {
-        console.log(logo.img);
-        var logoList = $("<li></li>");
-        var logoImg = $('<img />',
-                            {
-                            src: logo.img,
-                            height: logo.height 
-                            });
-        logoListContainer.append(logoList);
-        logoList.append(logoImg);
-    });
-}
+
+// $('button-saved').click(function () {
+//     var savedMovies = JSON.parse(localStorage.getItem('savedMovies')) || []; 
+
+
+//      savedMovies.push(movie);  
+//     localStorage.setItem('savedMovies', savedMovies)
+//     })
+
+
+
+
 
 async function fetchMovies(searchResult) {
     const response = await fetch("https://www.omdbapi.com/?s="+ searchResult + "&apikey=5b9195cb", httpOptions);
