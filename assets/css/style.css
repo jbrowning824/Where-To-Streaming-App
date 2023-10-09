@@ -6,6 +6,9 @@ nav {
     overflow: hidden;
     top: 0; left:0; right:0; bottom:0
 }
+#genre-bar{
+    display: none;
+}
 .nav-wrapper .input-field
 input[type=search]{
     padding-left: 2.5rem;
@@ -51,6 +54,7 @@ input[type=search]:focus:not(.browser-default){
     border-radius: 5px;
     width: 100%; 
     font-size: 1.25rem;
+    
 }
 .aside ul li:hover{
     background-color: #757575;
@@ -111,6 +115,8 @@ input[type=search]:focus:not(.browser-default){
 }
 .movie-modal{
     border-radius: 5px;
+    height: 100%;
+    max-height: 800px;
 }
 
 
@@ -118,9 +124,13 @@ input[type=search]:focus:not(.browser-default){
     color: #ffab40 ;
 }
 .modal-content{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap-reverse;
     width: 100%;
     height: 100%;
     color: white;
+    justify-content: space-between;
 }
 .movie-content{
     display: flex;
@@ -128,41 +138,52 @@ input[type=search]:focus:not(.browser-default){
     flex-wrap: wrap-reverse;
     justify-content: space-between;
     align-items: flex-end;
-    width: 100%;
-
+    flex: 1 0 25rem;
+}
+.trailer-wrapper{
+    display: flex;
+    flex: 1 0 25rem;
+    justify-content: center;
 }
 .movie-info{
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
     position: relative;
     word-wrap: break-word;
-    max-width: 450px;
-
+    height: 100%;
+}
+.movie-info-wrapper{
+    padding-right: 5%;
 }
 .movie-trailer{
-    display: inline-block;
-    position: relative;
-    margin-top: 0;
-    padding-top: 0;
-    top: 0;
-    max-width: 50%;
-    height: 100%;
+    justify-content: flex-end;
 }
 iframe{
     width: 420px;
     height: 315px;
 }
 .modal-header{
-
     word-wrap: break-word;
     color: white;
-    
+}
+.logo-wrapper{
+   position: relative;
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-end;
+   margin-top: auto;
+}
+.logo-list-container{
+    align-items: end;
+    list-style-type: none;
+    display: inline;
+}
+.logo-list-container li{
+   
+    display: inline;
+    padding-right: 20px;    
 }
 
-
-.trailer{
-    position: absolute;
-    top: 0;    
-}
 
 ::-webkit-scrollbar {
     width: 10px;
@@ -213,6 +234,14 @@ iframe{
 @media only screen and (max-width: 600px) {
 nav .brand-logo {
     font-size: 1rem;
+}
+#genre-bar, select{
+    display:block;
+    color: white;
+    font-size: 1.5rem;
+    background-color: #424242;
+    margin: 0;
+    padding: 5px;
 }
 .input-field{
     width: 65%;
