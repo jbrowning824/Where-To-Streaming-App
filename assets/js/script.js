@@ -142,7 +142,7 @@ $(document).ready(function(){
         event.preventDefault();
         isShowingSaved = false;
         var result = $('#search').val()
-        
+        showing.text(result);
         cardContainer.empty();
         $('#search').val('');
         getSearchResults(result);
