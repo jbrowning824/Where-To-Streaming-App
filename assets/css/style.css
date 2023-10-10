@@ -59,7 +59,26 @@ input[type=search]:focus:not(.browser-default){
 .aside ul li:hover{
     background-color: #757575;
 }
-
+.aside, .btn-saved-movies{
+    font-size: .90rem;
+    color: white;
+    background-color: #616161;
+    width: 100%;
+}
+.btn-saved-movies:hover{
+    background-color:#757575;
+}
+.btn-saved-movies:focus{
+    background-color: #616161;
+}
+.now-showing-wrapper{
+    color: white;
+    font-size: 1.5rem;
+}
+.now-showing{
+    color: white;
+    font-size: 1.5rem;
+}
 .main {
     position: relative;
     width: 80%;

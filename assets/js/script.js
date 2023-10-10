@@ -72,7 +72,7 @@ var genres = {
     10764: "Reality",
     10767: "Talk Show"
 }
-
+var showing = $('.now-showing');
 var isShowingSaved = false;
 var services = ['netflix', 'prime.subscription','hbo,hulu.addon.hbo,prime.addon.hbomaxus',
 'prime.rent,prime.buy,apple.rent,apple.buy','hulu.subscription,hulu.addon.hbo',
@@ -81,6 +81,7 @@ var services = ['netflix', 'prime.subscription','hbo,hulu.addon.hbo,prime.addon.
 const storedMovies = {};
 
 
+var showingWrapper = $('.now-showing-wrapper');
 var httpOptions = {
     cache: "no-cache",
 }
@@ -93,19 +94,49 @@ $(document).ready(function(){
             $(this).find('.modal-content').empty();
         }
     });
-    
 
+    
     $('.card-container').on("click", `a[href="#more-info"]`, ((event) => {
         var instance = M.Modal.getInstance($('#movie-full-info'));
         //need to add streaming icons function that fires from here.
         instance.open();
         populateModal(event.target);
     }));
-    $('#genre-select').change((event) => {
+    $('.btn-saved-movies').click(() =>{
+        var savedMovies = JSON.parse(localStorage.getItem('savedMovies')) || [];
+            if(savedMovies.length > 0)
+            {
+                showing.text('Saved Movies');
+                savedMovies.forEach((movie) =>
+                storedMovies[movie.imdbID] = movie);
+                loadMovies();
+            }
+            else{
+                showing.text('No Saved Movies');
+            }
+        }
+    )
+    $('#genre-select-container').change(function(event) {
         isShowingSaved = false;
         cardContainer.empty();
-        var result = [$(event.target).text()];
-        getGenreResults(result)
+        var result = [$(this).find(":selected").val()];  
+        console.log(result);
+        if(result != "saved-movies"){      
+            getGenreResults(result)
+        }
+        else {
+            var savedMovies = JSON.parse(localStorage.getItem('savedMovies')) || [];
+            if(savedMovies.length > 0)
+            {
+                showing.text('Saved Movies');
+                savedMovies.forEach((movie) =>
+                storedMovies[movie.imdbID] = movie);
+                loadMovies();
+            }
+            else{
+                showing.text('No Saved Movies');
+            }
+        }
     })
     $("form").submit(function(){
         event.preventDefault();
@@ -125,7 +156,9 @@ $(document).ready(function(){
         cardContainer.empty();
         isShowingSaved = false;
         var result = [$(event.target).text()];
+        console.log(result);
         getGenreResults(result)
+
   });
 });
 
@@ -379,10 +412,15 @@ async function getSearchResults(result){
 
 async function getGenreResults(results){
     var genreId = "";
+    var genreName = [];
     results.forEach(async (result) => {
         genreId += (Object.keys(genres,result)
             .find(key => genres[key] === result)).toString() + ",";
+            genreName.push(result);
         })
+        
+        showing.empty();
+        showing.text(genreName.splice(','))
         var movieGenreResults = await fetchMoviesGenre(genreId);
         console.log(movieGenreResults);
         movieGenreResults.result.forEach(async(movie) => {
@@ -402,11 +440,13 @@ async function init(){
     var savedMovies = JSON.parse(localStorage.getItem('savedMovies')) || [];
     if(savedMovies.length > 0)
     {
+        showing.text('Saved Movies');
         savedMovies.forEach((movie) =>
         storedMovies[movie.imdbID] = movie);
         loadMovies();
     }
     else{
+        
         await getGenreResults(["Horror", "Comedy", "Action"]);
     }
 }
