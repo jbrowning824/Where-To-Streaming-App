@@ -14,36 +14,39 @@
     <div>
       <!-- Navbar and Search -->
       <nav>
-        <div class="nav-wrapper #424242 grey darken-3">
-          <a class="brand-logo right">StreamLine Cinemas</a>
-            <form>
-              <div class="input-field left">
-                <input id="search" type="search" required placeholder="Search by movie title...">
-                <label class="label-icon" for="search"><i class="material-icons">search</i></label>
-                <i class="material-icons clear-input">close</i>
-              </div>
-            </form>
+        <div class="nav-wrapper #424242 grey darken-3" id="navbar">
+          <a class="brand-logo right" id="brand">StreamLine Cinemas</a>
+          <form>
+            <div class="input-field left">
+              <input id="search" type="search" required placeholder="Search by movie title...">
+              <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+              <i class="material-icons clear-input">close</i>
+            </div>
+          </form>
         </div>
       </nav>
-
+      <div id="genre-bar">
+        <select name="genre" id="genre-select-container">
+          <option value="" disabled="disabled" selected="selected">Saved Movies and Genres</option>
+          <optgroup label="Saved Movies"></optgroup>
+            <option value="saved-movies" id="saved-movies">Show Saved Movies</option>
+          <optgroup label="Genres" id="genre-select"></optgroup>
+        </select>
+      </div>
       <!-- Page Layout here -->
       <div class="row content">
         <!-- Aside Layout for Genres -->
         <div class="col s12 m2 l2 aside #424242 grey darken-3">
+          <button class="btn-saved-movies">View Saved Movies</button>
           <h5>Genres:</h5>
           <ul id="genres">
-            <!-- <li>Adventure</li>
-            <li>Action</li>
-            <li>Crime</li>
-            <li>Drama</li>
-            <li>Documentary</li>
-            <li>Horror</li>
-            <li>Romance</li> -->
+
           </ul>
         </div>
 
         <!-- Main Content for Movie Cards -->
         <div class="col s12 m10 l10 #424242 grey darken-3 main">
+          <div class="col s12 m12 l12 now-showing-wrapper">Now Showing Results For - <Showing:span class="now-showing"></Showing:span></div>
           <div class="row card-container">
             <!-- Populated through JQuery -->
           </div>
