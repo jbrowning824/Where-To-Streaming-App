@@ -292,10 +292,18 @@ function addGeneres(){
     }
 }
 async function getTrailer(id){
+    try{
     var response = await fetch("https://bootcamp-movietrailer.azurewebsites.net/api/Function1?id=" + id,
     {headers: {
         'x-functions-key': 'NS4_Xn9DxrWabt2clUfPI9CF92SgUV2rwkZVIyk_HVIoAzFuqR0TLg=='}})
     return await response.json();
+    }
+    catch{
+        var resp = {
+            status: 'error',
+        }
+        return resp;
+    }
 }
 
 async function populateModal(event){   
@@ -319,6 +327,7 @@ console.log(streaming);
         var logoList = $("<li></li>").text('Not currently streaming...');
     }
     var trailerResponse = await getTrailer(event.id);
+    console.log('trailer status: ' + trailerResponse.status);
     if(trailerResponse.status != 'error'){
         if(trailerResponse.trailer != null){
             var youtube_id = trailerResponse.trailer.youtube_video_id;
